@@ -20,4 +20,12 @@ namespace '/api/v1' do
   get '/books' do
     Book.all.to_json
   end
+
+  get '/times' do
+    {
+      data: {
+        time: Time.now
+      }
+    }.to_json
+  end
 end
