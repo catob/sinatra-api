@@ -18,7 +18,13 @@ namespace '/api/v1' do
   end
 
   get '/books' do
-    Book.all.to_json
+    books = Book.all
+
+    %i[title isbn author].each do |filter|
+      books = books.send(filter, params[filter]) if params[filter]
+    end
+
+    books.map { |book| BookSerializer.new(book) }.to_json
   end
 
   get '/times' do
