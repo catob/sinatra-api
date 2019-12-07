@@ -3,9 +3,10 @@ require 'sinatra/namespace'
 require 'mongoid'
 
 require_relative 'book'
+require_relative 'book_serializer'
 
 # DB Setup
-Mongoid.load! "mongoid.config"
+Mongoid.load! 'mongoid.config'
 
 # Endpoints
 get '/' do
