@@ -30,7 +30,7 @@ namespace '/api/v1' do
   end
 
   get '/books/:id' do |id|
-    book = Book.find(id)
+    book = Book.where(id: id).first
     halt(404, { message: 'Book not found' }.to_json ) unless book
     BookSerializer.new(book).to_json
   end
@@ -40,6 +40,18 @@ namespace '/api/v1' do
     if book.save
       response.headers['Location'] = "#{base_url}/api/v1/#{book.id}"
       status 201
+    else
+      status 422
+      body BookSerializer.new(book).to_json
+    end
+  end
+
+  patch '/books/:id' do |id|
+    book = Book.where(id: id).first
+    halt(404, { message: 'Book not found' }.to_json ) unless book
+
+    if book.update_attributes(json_params)
+      BookSerializer.new(book)
     else
       status 422
       body BookSerializer.new(book).to_json
